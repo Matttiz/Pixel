@@ -1,29 +1,23 @@
 package hue;
 
-import hue.Connect;
-import hue.Messages;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class Client {
     HttpClient client = HttpClient.newHttpClient();
     HttpResponse<String> response;
-
 
     @SneakyThrows
     public void setBulbColor(float x, float y) {
         String uri = Connect.BRIDGE_ADDRESS + Connect.API + Connect.USERNAME + Connect.LIGHTS + Connect.DEN_LIGHTS_ID + Connect.STATE;
         JSONObject gamut = Messages.BuildGamut(x, y);
 
-        // PUT
         HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(gamut.toString()))

@@ -16,7 +16,5 @@ public class Program {
             TransformColor transformColor = new TransformColor(averagePixelColor);
             client.setBulbColor(transformColor.getX(), transformColor.getY());
         }while (true);
-
-
     }
 }

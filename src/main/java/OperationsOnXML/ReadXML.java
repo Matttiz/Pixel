@@ -2,6 +2,11 @@ package OperationsOnXML;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import hue.Client;
 import lombok.SneakyThrows;
@@ -17,51 +22,70 @@ import java.util.Scanner;
 public class ReadXML {
     private static String bridgeAddress;
     private static String username;
-    private static NodeList nodeList;
-    private static Document doc;
+    private Document doc;
+    boolean writeFile = false;
+
 
     @SneakyThrows
     public ReadXML() {
-            File file = new File(Paths.get("").toAbsolutePath().toString() + "/config.xml");
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            doc = db.parse(file);
-            doc.getDocumentElement().normalize();
-            nodeList = doc.getElementsByTagName("appSettings");
-
+        File file = new File(Paths.get("").toAbsolutePath().toString() + "/config.xml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        doc = db.parse(file);
+        doc.getDocumentElement().normalize();
+        setBridgeAddress();
+        setUsername();
+        saveFile();
     }
 
-    public ReadXML setBridgeAddress(){
-        Node node =  nodeList.item(0);
-        if(((Element) node).getElementsByTagName("bridgeAddress").item(0).getTextContent().equals("")){
+    private ReadXML setBridgeAddress() {
+        Node bridgeAddressNode = doc.getElementsByTagName("bridgeAddress").item(0);
+        if (bridgeAddressNode.getTextContent().equals("")) {
             System.out.println("Please insert bridge ip.");
             Scanner scan = new Scanner(System.in);
-            String ipAddress =  scan.nextLine();
-            node.setTextContent(ipAddress);
-            bridgeAddress= ipAddress;
-        }else{
-            bridgeAddress = ((Element) node).getElementsByTagName("bridgeAddress").item(0).getTextContent();
+            String ipAddress = scan.nextLine();
+            bridgeAddressNode.setTextContent(ipAddress);
+            bridgeAddress = ipAddress;
+            writeFile = true;
+        } else {
+            bridgeAddress = bridgeAddressNode.getTextContent();
+        }
+        return this;
+    }
+
+    private ReadXML setUsername(){
+        Node usernameNode = doc.getElementsByTagName("username").item(0);
+        String usernameFromFile;
+        if (usernameNode.getTextContent().equals("")) {
+            Client client = new Client();
+            do {
+                client.createUser(this.getBridgeAddress());
+                usernameFromFile = client.username();
+            } while (usernameFromFile.equals(""));
+            usernameFromFile = usernameFromFile.substring(usernameFromFile.indexOf(":\""));
+            usernameFromFile = usernameFromFile.replace("\"", "");
+            usernameFromFile = usernameFromFile.replace(":", "");
+            usernameNode.setTextContent(usernameFromFile);
+            username = usernameFromFile;
+            writeFile = true;
+        } else {
+            username = usernameNode.getTextContent();
         }
         return this;
     }
 
     @SneakyThrows
-    public ReadXML setUsername(){
-        Node node = (Element) nodeList.item(0);
-        String usernameFromFile;
-        if(((Element) node).getElementsByTagName("username").item(0).getTextContent().equals("")){
-            Client client = new Client();
-            do {
-                client.createUser(this.getBridgeAddress());
-                usernameFromFile = client.username();
-            }while (usernameFromFile.equals(""));
-            usernameFromFile = usernameFromFile.substring(usernameFromFile.indexOf(":\""));
-            usernameFromFile = usernameFromFile.replace("\"", "");
-            usernameFromFile = usernameFromFile.replace(":", "");
-            node.setTextContent(usernameFromFile);
-            username = usernameFromFile;
-        }else {
-            username = ((Element) node).getElementsByTagName("username").item(0).getTextContent();
+    private ReadXML saveFile(){
+        if (writeFile) {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            doc.setXmlStandalone(true);
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("config.xml"));
+            transformer.transform(source, result);
+            System.out.println("File saved!");
         }
         return this;
     }
