@@ -27,10 +27,10 @@ public class Messages {
 
     @SneakyThrows
     public static JSONObject BuildGamut(float x, float y) throws Exception {
-        if(x<0.0 || x>1.0){
+        if (x < 0.0 || x > 1.0) {
             throw new Exception("x isn't correct");
         }
-        if(y<0.0 || y>1.0){
+        if (y < 0.0 || y > 1.0) {
             throw new Exception("x isn't correct");
         }
         List<Float> list = new ArrayList<Float>();
@@ -42,9 +42,9 @@ public class Messages {
     }
 
     @SneakyThrows
-    public static JSONObject BuildNewUser(){
+    public static JSONObject BuildNewUser() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("devicetype","pixel-sync");
+        jsonObject.put("devicetype", "pixel-sync");
         return jsonObject;
     }
 }
