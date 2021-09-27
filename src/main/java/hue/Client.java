@@ -23,13 +23,18 @@ public class Client {
                 + Connect.LIGHTS
                 + Connect.DEN_LIGHTS_ID
                 + Connect.STATE;
-        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(gamut.toString()))
-                .build();
+        try {
+            HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(gamut.toString()))
+                    .build();
 
-        this.response = client.send(request,
-                HttpResponse.BodyHandlers.ofString());
+            this.response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+        } catch (NullPointerException e){}
+
+
+
     }
 
     @SneakyThrows
