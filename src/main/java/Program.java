@@ -6,9 +6,10 @@ import java.awt.*;
 
 public class Program {
     public static void main(String[] args) throws Exception {
-        Color averagePixelColor = new Color(0, 0, 0);
+        Color averagePixelColor;
         Client client = new Client();
         DisplayColor displayColor;
+        client.setPowerOn();
         do {
             displayColor = new DisplayColor();
             displayColor.setAverageColor();

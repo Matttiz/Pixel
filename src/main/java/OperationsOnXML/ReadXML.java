@@ -1,20 +1,17 @@
 package OperationsOnXML;
 
-import javax.xml.parsers.DocumentBuilderFactory;
+import hue.Client;
+import lombok.SneakyThrows;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import hue.Client;
-import lombok.SneakyThrows;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
-
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -28,7 +25,7 @@ public class ReadXML {
 
     @SneakyThrows
     public ReadXML() {
-        File file = new File(Paths.get("").toAbsolutePath().toString() + "/config.xml");
+        File file = new File(Paths.get("").toAbsolutePath() + "/config.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         doc = db.parse(file);

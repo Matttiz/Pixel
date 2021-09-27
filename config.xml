@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><configuration>
     <appSettings>
-        <bridgeAddress></bridgeAddress>
-        <username></username>
+        <bridgeAddress>192.168.2.176</bridgeAddress>
+        <username>LZRixMwqFJei1iGzqtK2oNP1bSQgP6WtmtMtmiBf</username>
     </appSettings>
 </configuration>
