@@ -8,14 +8,14 @@ public class DisplayColor {
 
     private final int height = Toolkit.getDefaultToolkit().getScreenSize().height;
     private final int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-    private final int sampleHeight = 600;
-    private final int sampleWidth = 600;
+    private final int sampleHeight = 500;
+    private final int sampleWidth = 500;
 
     private final int pixelsNumber = (height * width) / (sampleHeight * sampleWidth);
     private final int pixelsHeightToCheck = height / sampleHeight;
     private final int pixelsWidthToCheck = width / sampleWidth;
 
-    private final int channelNumber = 64;
+    private final int channelNumber = 128;
     private Color color;
     private int blue;
     private int green;
@@ -26,7 +26,6 @@ public class DisplayColor {
     @SneakyThrows
     public DisplayColor(boolean simplest) {
         PixelColor pixel = new PixelColor();
-//        pixelChannelArray = new int[channelNumber][channelNumber][channelNumber];
         for (int i = 0; i < pixelsWidthToCheck; i++) {
             for (int j = 0; j < pixelsHeightToCheck; j++) {
                 pixel.getColor(i * sampleHeight, j * sampleWidth);
@@ -68,10 +67,7 @@ public class DisplayColor {
         for (int red = 0; red < channelNumber; red++) {
             for (int green = 0; green < channelNumber; green++) {
                 for (int blue = 0; blue < channelNumber; blue++) {
-                    System.out.println("Red " + red);
-                    System.out.println("Green " + green);
-                    System.out.println("Blue " + blue);
-                    if (pixelChannelArray[blue][red][green] > frequencyMostPopularColor) {
+                    if (pixelChannelArray[red][green][blue] > frequencyMostPopularColor) {
                         frequencyMostPopularColor = pixelChannelArray[red][green][blue];
                         mostPopularColor = new Color(
                                 red * (channelSize - 1) + halfChannelSize,
