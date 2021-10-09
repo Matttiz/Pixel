@@ -6,14 +6,19 @@ import java.awt.*;
 
 public class DisplayColor {
 
-    private final int height = 2160;
-    private final int width = 3840;
-    private final int sampleHeight = 800;
-    private final int sampleWidth = 800;
+    private final int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+    private final int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private final int sampleHeight = 200;
+    private final int sampleWidth = 200;
 
-    private final int pixelsHeightToCheck = height / sampleHeight;
-    private final int pixelsWidthToCheck = width / sampleWidth;
-    private final int pixelsNumber = (height * width) / (sampleHeight * sampleWidth);
+    private static int pixelsNumber;
+    private static int pixelsHeightToCheck;
+    private static int pixelsWidthToCheck;
+
+    private static int pixelHeightStart;
+    private static int pixelWidthStart;
+    private static SelectedPart part = new SelectedPart();
+
 
     private Color color;
     private int blue;
@@ -21,11 +26,25 @@ public class DisplayColor {
     private int red;
 
     @SneakyThrows
-    public DisplayColor() throws AWTException {
-        Robot robot = new Robot();
+    public DisplayColor( int witchQuarter, int quarter){
+        setFirstTime(witchQuarter, quarter);
         PixelColor pixel = new PixelColor();
-        for (int i = 0; i < pixelsWidthToCheck; i++) {
-            for (int j = 0; j < pixelsHeightToCheck; j++) {
+        for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
+            for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
+                pixel.getColor(i * sampleHeight, j * sampleWidth);
+                blue += pixel.getBlue();
+                red += pixel.getRed();
+                green += pixel.getGreen();
+            }
+        }
+    }
+
+    @SneakyThrows
+    public DisplayColor(){
+        setFirstTime(1, 1);
+        PixelColor pixel = new PixelColor();
+        for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
+            for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
                 pixel.getColor(i * sampleHeight, j * sampleWidth);
                 blue += pixel.getBlue();
                 red += pixel.getRed();
@@ -43,5 +62,16 @@ public class DisplayColor {
 
     public Color getPixelColor() {
         return this.color;
+    }
+
+    private void setFirstTime(int witchQuarter, int quarter) {
+        if (!part.isSet()){
+            pixelsNumber = ((height * width) / (sampleHeight * sampleWidth) / quarter);
+            pixelsHeightToCheck = (int) ((height / sampleHeight) / Math.sqrt(quarter));
+            pixelsWidthToCheck = (int) ((width / sampleWidth) / Math.sqrt(quarter));
+            part = new SelectedPart(quarter, witchQuarter);
+            pixelHeightStart = part.getStartHeightPart() * pixelsHeightToCheck ;
+            pixelWidthStart = part.getStartWidthPart() * pixelsWidthToCheck;
+        }
     }
 }

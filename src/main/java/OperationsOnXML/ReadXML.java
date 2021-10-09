@@ -17,15 +17,15 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class ReadXML {
-    private static String filePath = "/config.xml";
     private static String bridgeAddress;
     private static String username;
     private Document doc;
     boolean writeFile = false;
 
+
     @SneakyThrows
     public ReadXML() {
-        File file = new File(Paths.get("").toAbsolutePath().toString() + filePath);
+        File file = new File(Paths.get("").toAbsolutePath() + "/config.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         doc = db.parse(file);
@@ -50,7 +50,7 @@ public class ReadXML {
         return this;
     }
 
-    private ReadXML setUsername() {
+    private ReadXML setUsername(){
         Node usernameNode = doc.getElementsByTagName("username").item(0);
         String usernameFromFile;
         if (usernameNode.getTextContent().equals("")) {
@@ -72,7 +72,7 @@ public class ReadXML {
     }
 
     @SneakyThrows
-    private ReadXML saveFile() {
+    private ReadXML saveFile(){
         if (writeFile) {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -80,7 +80,7 @@ public class ReadXML {
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             doc.setXmlStandalone(true);
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(filePath));
+            StreamResult result = new StreamResult(new File("config.xml"));
             transformer.transform(source, result);
             System.out.println("File saved!");
         }
