@@ -20,10 +20,13 @@ public class DisplayColor {
     private static SelectedPart part = new SelectedPart();
 
 
+    private final int channelNumber = 128;
     private Color color;
     private int blue;
     private int green;
     private int red;
+
+    private int[][][] pixelChannelArray = new int[channelNumber][channelNumber][channelNumber];
 
     @SneakyThrows
     public DisplayColor( int witchQuarter, int quarter){
@@ -36,6 +39,31 @@ public class DisplayColor {
                 red += pixel.getRed();
                 green += pixel.getGreen();
             }
+        }
+    }
+
+    @SneakyThrows
+    public DisplayColor(boolean simplest) {
+        PixelColor pixel = new PixelColor();
+        for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
+            for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
+                pixel.getColor(i * sampleHeight, j * sampleWidth);
+                if (simplest) {
+                    red += pixel.getRed();
+                    green += pixel.getGreen();
+                    blue += pixel.getBlue();
+                } else {
+                    pixelChannelArray
+                            [pixel.getRed() / (256 / channelNumber)]
+                            [pixel.getGreen() / (256 / channelNumber)]
+                            [pixel.getBlue() / (256 / channelNumber)] += 1;
+                }
+            }
+        }
+        if (simplest) {
+            setAverageColor();
+        } else {
+            setMostPopularColor();
         }
     }
 
@@ -73,5 +101,27 @@ public class DisplayColor {
             pixelHeightStart = part.getStartHeightPart() * pixelsHeightToCheck ;
             pixelWidthStart = part.getStartWidthPart() * pixelsWidthToCheck;
         }
+    }
+
+    public void setMostPopularColor() {
+        Color mostPopularColor = new Color(0, 0, 0);
+        int frequencyMostPopularColor = pixelChannelArray[0][0][0];
+        int channelSize = 256 / channelNumber;
+        int halfChannelSize = channelSize / 2;
+        for (int red = 0; red < channelNumber; red++) {
+            for (int green = 0; green < channelNumber; green++) {
+                for (int blue = 0; blue < channelNumber; blue++) {
+                    if (pixelChannelArray[red][green][blue] > frequencyMostPopularColor) {
+                        frequencyMostPopularColor = pixelChannelArray[red][green][blue];
+                        mostPopularColor = new Color(
+                                red * (channelSize - 1) + halfChannelSize,
+                                green * (channelSize - 1) + halfChannelSize,
+                                blue * (channelSize - 1) + halfChannelSize
+                        );
+                    }
+                }
+            }
+        }
+        this.color = mostPopularColor;
     }
 }
