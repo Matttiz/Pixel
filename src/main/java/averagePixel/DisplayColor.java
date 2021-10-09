@@ -26,8 +26,8 @@ public class DisplayColor {
     private int red;
 
     @SneakyThrows
-    public DisplayColor(int quarter, int witchQuarter) {
-        setFirstTime(quarter, witchQuarter);
+    public DisplayColor( int witchQuarter, int quarter) {
+        setFirstTime(witchQuarter, quarter);
         PixelColor pixel = new PixelColor();
         for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
             for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
@@ -50,7 +50,7 @@ public class DisplayColor {
         return this.color;
     }
 
-    private void setFirstTime(int quarter, int witchQuarter) {
+    private void setFirstTime(int witchQuarter, int quarter) {
         if (!part.isSet()){
             pixelsNumber = ((height * width) / (sampleHeight * sampleWidth) / quarter);
             pixelsHeightToCheck = (int) ((height / sampleHeight) / Math.sqrt(quarter));
