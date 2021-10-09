@@ -16,8 +16,8 @@ public class SelectedPart {
         this.quarter = quarter;
         int sqrt = (int) (Math.sqrt(quarter));
         this.witchQuarter = witchQuarter;
-        this.startHeightPart = (int) witchQuarter / sqrt;
-        this.startWidthPart = (int) witchQuarter % sqrt;
+        this.startHeightPart = witchQuarter / sqrt;
+        this.startWidthPart = witchQuarter % sqrt;
         set = true;
     }
 

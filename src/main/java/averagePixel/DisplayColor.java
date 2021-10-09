@@ -6,17 +6,14 @@ import java.awt.*;
 
 public class DisplayColor {
 
-    private static int quarter;
-    private static int  witchQuarter;
-
     private final int height = Toolkit.getDefaultToolkit().getScreenSize().height;
     private final int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-    private final int sampleHeight = 600;
-    private final int sampleWidth = 600;
+    private final int sampleHeight = 200;
+    private final int sampleWidth = 200;
 
-    private final int pixelsNumber = (height * width / quarter) / (sampleHeight * sampleWidth);
-    private final int pixelsHeightToCheck = (int) ((height / sampleHeight) / Math.sqrt(quarter));
-    private final int pixelsWidthToCheck = (int) ((width / sampleWidth) / Math.sqrt(quarter));
+    private static int pixelsNumber;
+    private static int pixelsHeightToCheck;
+    private static int pixelsWidthToCheck;
 
     private static int pixelHeightStart;
     private static int pixelWidthStart;
@@ -30,14 +27,7 @@ public class DisplayColor {
 
     @SneakyThrows
     public DisplayColor(int quarter, int witchQuarter) {
-        if (!part.isSet()){
-            part = new SelectedPart(quarter,witchQuarter);
-            pixelHeightStart = part.getStartHeightPart() * pixelsHeightToCheck ;
-            pixelWidthStart = part.getStartWidthPart() * pixelsWidthToCheck;
-
-        }
-
-
+        setFirstTime(quarter, witchQuarter);
         PixelColor pixel = new PixelColor();
         for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
             for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
@@ -60,12 +50,14 @@ public class DisplayColor {
         return this.color;
     }
 
-    public void setHeightQuarter(int witchQuarter){
-        int  sqrt  = (int) (Math.sqrt(quarter));
-        int all = (int) witchQuarter/sqrt;
-        int part = (int) witchQuarter%sqrt;
-
-        int startHeight = all + pixelsHeightToCheck/sqrt;
-        int startWidth = part + pixelsWidthToCheck/sqrt;
+    private void setFirstTime(int quarter, int witchQuarter) {
+        if (!part.isSet()){
+            pixelsNumber = ((height * width) / (sampleHeight * sampleWidth) / quarter);
+            pixelsHeightToCheck = (int) ((height / sampleHeight) / Math.sqrt(quarter));
+            pixelsWidthToCheck = (int) ((width / sampleWidth) / Math.sqrt(quarter));
+            part = new SelectedPart(quarter, witchQuarter);
+            pixelHeightStart = part.getStartHeightPart() * pixelsHeightToCheck ;
+            pixelWidthStart = part.getStartWidthPart() * pixelsWidthToCheck;
+        }
     }
 }
