@@ -29,21 +29,34 @@ public class DisplayColor {
     private int[][][] pixelChannelArray = new int[channelNumber][channelNumber][channelNumber];
 
     @SneakyThrows
-    public DisplayColor( int witchQuarter, int quarter){
+    public DisplayColor(int witchQuarter, int quarter, boolean simplest){
         setFirstTime(witchQuarter, quarter);
         PixelColor pixel = new PixelColor();
         for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
             for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
                 pixel.getColor(i * sampleHeight, j * sampleWidth);
-                blue += pixel.getBlue();
-                red += pixel.getRed();
-                green += pixel.getGreen();
+                if (simplest) {
+                    red += pixel.getRed();
+                    green += pixel.getGreen();
+                    blue += pixel.getBlue();
+                } else {
+                    pixelChannelArray
+                            [pixel.getRed() / (256 / channelNumber)]
+                            [pixel.getGreen() / (256 / channelNumber)]
+                            [pixel.getBlue() / (256 / channelNumber)] += 1;
+                }
             }
+        }
+        if (simplest) {
+            setAverageColor();
+        } else {
+            setMostPopularColor();
         }
     }
 
     @SneakyThrows
     public DisplayColor(boolean simplest) {
+        setFirstTime(1, 1);
         PixelColor pixel = new PixelColor();
         for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
             for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
@@ -69,7 +82,12 @@ public class DisplayColor {
 
     @SneakyThrows
     public DisplayColor(){
+        boolean simplest = true;
         setFirstTime(1, 1);
+        setProperPixelToDisplay(simplest);
+    }
+
+    private void setProperPixelToDisplay(boolean simplest) throws AWTException {
         PixelColor pixel = new PixelColor();
         for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
             for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
@@ -78,6 +96,26 @@ public class DisplayColor {
                 red += pixel.getRed();
                 green += pixel.getGreen();
             }
+        }
+        for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
+            for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
+                pixel.getColor(i * sampleHeight, j * sampleWidth);
+                if (simplest) {
+                    red += pixel.getRed();
+                    green += pixel.getGreen();
+                    blue += pixel.getBlue();
+                } else {
+                    pixelChannelArray
+                            [pixel.getRed() / (256 / channelNumber)]
+                            [pixel.getGreen() / (256 / channelNumber)]
+                            [pixel.getBlue() / (256 / channelNumber)] += 1;
+                }
+            }
+        }
+        if (simplest) {
+            setAverageColor();
+        } else {
+            setMostPopularColor();
         }
     }
 

@@ -11,8 +11,7 @@ public class Program {
         DisplayColor displayColor;
         client.setPowerOn();
         do {
-            displayColor = new DisplayColor(0,4);
-            displayColor = new DisplayColor(false);
+            displayColor = new DisplayColor(0,4,false);
             displayColor.setAverageColor();
             averagePixelColor = displayColor.getPixelColor();
             TransformColor transformColor = new TransformColor(averagePixelColor);
