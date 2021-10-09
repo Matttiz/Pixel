@@ -26,8 +26,22 @@ public class DisplayColor {
     private int red;
 
     @SneakyThrows
-    public DisplayColor( int witchQuarter, int quarter) {
+    public DisplayColor( int witchQuarter, int quarter){
         setFirstTime(witchQuarter, quarter);
+        PixelColor pixel = new PixelColor();
+        for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
+            for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
+                pixel.getColor(i * sampleHeight, j * sampleWidth);
+                blue += pixel.getBlue();
+                red += pixel.getRed();
+                green += pixel.getGreen();
+            }
+        }
+    }
+
+    @SneakyThrows
+    public DisplayColor(){
+        setFirstTime(1, 1);
         PixelColor pixel = new PixelColor();
         for (int i = pixelWidthStart; i <pixelWidthStart +  pixelsWidthToCheck; i++) {
             for (int j = pixelHeightStart; j < pixelHeightStart + pixelsHeightToCheck; j++) {
