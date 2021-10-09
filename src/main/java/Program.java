@@ -5,14 +5,13 @@ import hue.Client;
 import java.awt.*;
 
 public class Program {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
         Color averagePixelColor;
         Client client = new Client();
         DisplayColor displayColor;
         client.setPowerOn();
         do {
-            displayColor = new DisplayColor();
-            displayColor.setAverageColor();
+            displayColor = new DisplayColor(false);
             averagePixelColor = displayColor.getPixelColor();
             TransformColor transformColor = new TransformColor(averagePixelColor);
             client.setBulbColor(transformColor.getX(), transformColor.getY());
