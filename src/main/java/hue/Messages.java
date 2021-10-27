@@ -31,7 +31,7 @@ public class Messages {
             throw new Exception("x isn't correct");
         }
         if(y<0.0 || y>1.0){
-            throw new Exception("x isn't correct");
+            throw new Exception("y isn't correct");
         }
         List<Float> list = new ArrayList<Float>();
         list.add(x);
