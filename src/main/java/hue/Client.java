@@ -101,6 +101,7 @@ public class Client {
                 + Connect.LIGHTS
                 + "/"
                 + bulbNumber;
+        System.out.println(uri);
         HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
                 .header("Content-Type", "application/json")
                 .GET()
@@ -116,7 +117,8 @@ public class Client {
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(turnOn.toString()))
                     .build();
-
+            System.out.println(uri);
+            System.out.println(HttpRequest.BodyPublishers.ofString(turnOn.toString()));
             HttpResponse<String> response2 = client.send(request2,
                     HttpResponse.BodyHandlers.ofString());
         }

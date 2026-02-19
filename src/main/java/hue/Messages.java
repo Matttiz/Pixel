@@ -15,12 +15,6 @@ public class Messages {
         return isLightOn;
     }
 
-//    public static JSONObject BuildLightIsOn(boolean isOn) {
-//        JSONObject isLightOn = new JSONObject();
-//        isLightOn.put("on", isOn);
-//        return isLightOn;
-//    }
-
     @SneakyThrows
     public static JSONObject BuildBrightness(short brightness) throws Exception {
         if (brightness < 0 || brightness > 255) {
