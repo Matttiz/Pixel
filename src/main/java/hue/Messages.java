@@ -9,11 +9,17 @@ import java.util.List;
 public class Messages {
 
 
-    public static JSONObject BuildLightIsOn(boolean isOn) {
+    public static JSONObject changeBulbStatusTo(boolean status) {
         JSONObject isLightOn = new JSONObject();
-        isLightOn.put("on", isOn);
+        isLightOn.put("on", status);
         return isLightOn;
     }
+
+//    public static JSONObject BuildLightIsOn(boolean isOn) {
+//        JSONObject isLightOn = new JSONObject();
+//        isLightOn.put("on", isOn);
+//        return isLightOn;
+//    }
 
     @SneakyThrows
     public static JSONObject BuildBrightness(short brightness) throws Exception {

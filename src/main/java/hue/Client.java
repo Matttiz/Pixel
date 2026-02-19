@@ -31,10 +31,7 @@ public class Client {
 
             this.response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
-        } catch (NullPointerException e){}
-
-
-
+        } catch (NullPointerException ignored){}
     }
 
     @SneakyThrows
@@ -67,7 +64,7 @@ public class Client {
     }
 
     @SneakyThrows
-    public void setPowerOn(){
+    public void setPowerOn() {
         if(!isOn){
             String uri = Connect.BRIDGE_ADDRESS
                     + Connect.API
@@ -84,7 +81,7 @@ public class Client {
 
             boolean status = new JSONObject(response.body()).getJSONObject("state").getBoolean("on") ;
             if(!status){
-                JSONObject turnOn = Messages.BuildLightIsOn(true);
+                JSONObject turnOn = Messages.changeBulbStatusTo(true);
                 HttpRequest request2 = HttpRequest.newBuilder(URI.create(uri + Connect.STATE))
                         .header("Content-Type", "application/json")
                         .PUT(HttpRequest.BodyPublishers.ofString(turnOn.toString()))
@@ -93,6 +90,35 @@ public class Client {
                 HttpResponse<String> response2 = client.send(request2,
                         HttpResponse.BodyHandlers.ofString());
             }
+        }
+    }
+
+    @SneakyThrows
+    public void setPowerOff(int bulbNumber) {
+        String uri = Connect.BRIDGE_ADDRESS
+                + Connect.API
+                + Connect.USERNAME
+                + Connect.LIGHTS
+                + "/"
+                + bulbNumber;
+        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request,
+                HttpResponse.BodyHandlers.ofString());
+
+        boolean status = new JSONObject(response.body()).getJSONObject("state").getBoolean("on") ;
+        if (status) {
+            JSONObject turnOn = Messages.changeBulbStatusTo(false);
+            HttpRequest request2 = HttpRequest.newBuilder(URI.create(uri + Connect.STATE))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(turnOn.toString()))
+                    .build();
+
+            HttpResponse<String> response2 = client.send(request2,
+                    HttpResponse.BodyHandlers.ofString());
         }
     }
 }
